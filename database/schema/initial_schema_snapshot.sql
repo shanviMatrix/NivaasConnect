@@ -1,12 +1,3 @@
-
--- ============================================================
--- NivaasConnect
--- File: database/02_schema.sql
--- Database: PostgreSQL
--- Purpose: Create the society management module tables
--- Prerequisite: apartments and residents already exist
--- ============================================================
-
 -- 1. Vendors: maintenance and society service providers
 CREATE TABLE IF NOT EXISTS vendors (
     vendor_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -143,10 +134,6 @@ CREATE TABLE IF NOT EXISTS society_events (
     CHECK (end_time > start_time)
 );
 
--- ============================================================
--- Indexes for common joins, filters and reports
--- ============================================================
-
 CREATE INDEX IF NOT EXISTS idx_bills_apartment
     ON maintenance_bills(apartment_id);
 
@@ -174,6 +161,3 @@ CREATE INDEX IF NOT EXISTS idx_bookings_resident
 CREATE INDEX IF NOT EXISTS idx_events_start_time
     ON society_events(start_time);
 
--- ============================================================
--- End of schema
--- ============================================================
