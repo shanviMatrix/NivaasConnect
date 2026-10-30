@@ -1,0 +1,30 @@
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# IDE and operating system
+.vscode/
+.idea/
+.DS_Store
+
+# Logs
+*.log
+
+# Local database backups
+*.dump
+*.backup
+*.sql.gz
