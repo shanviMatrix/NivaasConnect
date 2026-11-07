@@ -24,33 +24,45 @@ BILL_SELECT = """
 """
 
 
-async def get_bills(pool, limit: int, offset: int):
+
+async def get_bills(pool, limit: int, offset: int, resident_id: int | None = None):
     async with pool.connection() as connection:
         async with connection.cursor(row_factory=dict_row) as cursor:
-            await cursor.execute(
-                BILL_SELECT + """
+            query = BILL_SELECT
+            params = []
+            if resident_id is not None:
+                query += """
+                    WHERE b.apartment_id = (
+                        SELECT apartment_id FROM residents
+                        WHERE resident_id = %s
+                    )
+                """
+                params.append(resident_id)
+            query += """
                 GROUP BY b.bill_id
                 ORDER BY b.billing_month DESC, b.bill_id
                 LIMIT %s OFFSET %s
-                """,
-                (limit, offset),
-            )
+            """
+            params.extend([limit, offset])
+            await cursor.execute(query, params)
             return await cursor.fetchall()
 
-
-async def get_bill(pool, bill_id: int):
+async def get_bill(pool, bill_id: int, resident_id: int | None = None):
     async with pool.connection() as connection:
         async with connection.cursor(row_factory=dict_row) as cursor:
-            await cursor.execute(
-                BILL_SELECT + """
-                WHERE b.bill_id = %s
-                GROUP BY b.bill_id
-                """,
-                (bill_id,),
-            )
+            query = BILL_SELECT + " WHERE b.bill_id = %s"
+            params = [bill_id]
+            if resident_id is not None:
+                query += """
+                    AND b.apartment_id = (
+                        SELECT apartment_id FROM residents
+                        WHERE resident_id = %s
+                    )
+                """
+                params.append(resident_id)
+            query += " GROUP BY b.bill_id"
+            await cursor.execute(query, params)
             return await cursor.fetchone()
-
-
 async def create_bill(pool, data: dict):
     async with pool.connection() as connection:
         async with connection.cursor(row_factory=dict_row) as cursor:

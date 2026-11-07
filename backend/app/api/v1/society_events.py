@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Query, Request, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from psycopg.errors import ForeignKeyViolation
 
 from app.schemas.society_event import (
@@ -8,7 +8,9 @@ from app.schemas.society_event import (
 )
 from app.services import society_event_service
 
-router = APIRouter(prefix="/society-events", tags=["Society Events"])
+from app.api.dependencies import authorize_resource_access
+
+router = APIRouter(dependencies=[Depends(authorize_resource_access)], prefix="/society-events", tags=["Society Events"])
 
 
 @router.get("", response_model=list[SocietyEventResponse])

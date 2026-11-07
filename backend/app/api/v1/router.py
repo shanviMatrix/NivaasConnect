@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from app.api.v1.auth import router as auth_router
 from app.api.v1.apartments import router as apartments_router
 from app.api.v1.complaints import router as complaints_router
 from app.api.v1.facilities import router as facilities_router
@@ -17,6 +18,7 @@ api_router = APIRouter()
 
 for resource_router in (
     health_router,
+    auth_router,
     apartments_router,
     residents_router,
     vendors_router,

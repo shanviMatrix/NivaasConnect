@@ -1,10 +1,12 @@
-from fastapi import APIRouter, HTTPException, Query, Request, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from psycopg.errors import UniqueViolation
 
 from app.schemas.vendor import VendorCreate, VendorResponse, VendorUpdate
 from app.services import vendor_service
 
-router = APIRouter(prefix="/vendors", tags=["Vendors"])
+from app.api.dependencies import authorize_resource_access
+
+router = APIRouter(dependencies=[Depends(authorize_resource_access)], prefix="/vendors", tags=["Vendors"])
 
 
 @router.get("", response_model=list[VendorResponse])

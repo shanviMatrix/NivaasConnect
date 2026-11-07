@@ -7,31 +7,30 @@ BOOKING_COLUMNS = """
 """
 
 
-async def get_bookings(pool, limit: int, offset: int):
+
+async def get_bookings(pool, limit: int, offset: int, resident_id: int | None = None):
     async with pool.connection() as conn:
         async with conn.cursor(row_factory=dict_row) as cur:
-            await cur.execute(
-                f"""
-                SELECT {BOOKING_COLUMNS}
-                FROM facility_bookings
-                ORDER BY start_time DESC, booking_id DESC
-                LIMIT %s OFFSET %s
-                """,
-                (limit, offset),
-            )
+            query = f"SELECT {BOOKING_COLUMNS} FROM facility_bookings"
+            params = []
+            if resident_id is not None:
+                query += " WHERE resident_id = %s"
+                params.append(resident_id)
+            query += " ORDER BY start_time DESC, booking_id DESC LIMIT %s OFFSET %s"
+            params.extend([limit, offset])
+            await cur.execute(query, params)
             return await cur.fetchall()
 
-
-async def get_booking(pool, booking_id: int):
+async def get_booking(pool, booking_id: int, resident_id: int | None = None):
     async with pool.connection() as conn:
         async with conn.cursor(row_factory=dict_row) as cur:
-            await cur.execute(
-                f"SELECT {BOOKING_COLUMNS} FROM facility_bookings WHERE booking_id = %s",
-                (booking_id,),
-            )
+            query = f"SELECT {BOOKING_COLUMNS} FROM facility_bookings WHERE booking_id = %s"
+            params = [booking_id]
+            if resident_id is not None:
+                query += " AND resident_id = %s"
+                params.append(resident_id)
+            await cur.execute(query, params)
             return await cur.fetchone()
-
-
 async def create_booking(pool, data: dict):
     async with pool.connection() as conn:
         async with conn.cursor(row_factory=dict_row) as cur:
@@ -93,6 +92,7 @@ async def create_booking(pool, data: dict):
     return await get_booking(pool, booking_id)
 
 
+
 async def update_booking_status(pool, booking_id: int, booking_status: str):
     async with pool.connection() as conn:
         async with conn.cursor(row_factory=dict_row) as cur:
@@ -106,8 +106,6 @@ async def update_booking_status(pool, booking_id: int, booking_status: str):
                 (booking_status, booking_id),
             )
             result = await cur.fetchone()
-
     if result is None:
         return None
-
     return await get_booking(pool, booking_id)

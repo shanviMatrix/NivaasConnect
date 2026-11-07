@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Query, Request, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from psycopg.errors import ForeignKeyViolation, UniqueViolation
 
 from app.schemas.resident import (
@@ -9,7 +9,9 @@ from app.schemas.resident import (
 )
 from app.services import resident_service
 
-router = APIRouter(prefix="/residents", tags=["Residents"])
+from app.api.dependencies import authorize_resource_access, get_current_user
+
+router = APIRouter(dependencies=[Depends(authorize_resource_access)], prefix="/residents", tags=["Residents"])
 
 
 @router.get("", response_model=list[ResidentDetailResponse])
@@ -44,6 +46,23 @@ async def create_resident(data: ResidentCreate, request: Request):
             status_code=404,
             detail="The specified apartment does not exist.",
         )
+
+
+@router.get("/me", response_model=ResidentDetailResponse)
+async def read_my_resident_profile(
+    request: Request,
+    current_user: dict = Depends(get_current_user),
+):
+    resident_id = current_user.get("resident_id")
+    if current_user["role"] != "Resident" or resident_id is None:
+        raise HTTPException(status_code=403, detail="Resident profile access required.")
+
+    resident = await resident_service.get_resident(
+        request.app.state.db_pool, resident_id
+    )
+    if resident is None:
+        raise HTTPException(status_code=404, detail="Resident profile not found.")
+    return resident
 
 
 @router.get("/{resident_id}", response_model=ResidentDetailResponse)

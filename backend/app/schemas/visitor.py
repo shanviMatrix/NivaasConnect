@@ -11,7 +11,7 @@ class VisitorCreate(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     resident_id: int = Field(gt=0)
-    guard_id: int = Field(gt=0)
+    guard_id: int | None = Field(default=None, gt=0)
     visitor_name: str = Field(min_length=1, max_length=100)
     visitor_phone: str | None = Field(default=None, max_length=15)
     purpose: str = Field(min_length=1, max_length=200)

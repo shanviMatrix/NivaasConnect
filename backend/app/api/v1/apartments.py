@@ -1,10 +1,12 @@
-from fastapi import APIRouter, HTTPException, Query, Request, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from psycopg.errors import ForeignKeyViolation, UniqueViolation
 
 from app.schemas.apartment import ApartmentCreate, ApartmentResponse, ApartmentUpdate
 from app.services import apartment_service
 
-router = APIRouter(prefix="/apartments", tags=["Apartments"])
+from app.api.dependencies import require_roles
+
+router = APIRouter(dependencies=[Depends(require_roles("Admin"))], prefix="/apartments", tags=["Apartments"])
 
 
 @router.get("", response_model=list[ApartmentResponse])

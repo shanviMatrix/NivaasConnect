@@ -17,7 +17,7 @@ ComplaintStatus = Literal[
 class ComplaintCreate(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    resident_id: int = Field(gt=0)
+    resident_id: int | None = Field(default=None, gt=0)
     vendor_id: int | None = Field(default=None, gt=0)
     title: str = Field(min_length=1, max_length=150)
     description: str = Field(min_length=1)

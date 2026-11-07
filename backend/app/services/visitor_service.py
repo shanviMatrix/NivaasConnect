@@ -7,35 +7,30 @@ VISITOR_COLUMNS = """
 """
 
 
-async def get_visitors(pool, limit: int, offset: int):
+
+async def get_visitors(pool, limit: int, offset: int, guard_id: int | None = None):
     async with pool.connection() as connection:
         async with connection.cursor(row_factory=dict_row) as cursor:
-            await cursor.execute(
-                f"""
-                SELECT {VISITOR_COLUMNS}
-                FROM visitor_logs
-                ORDER BY entry_time DESC, visitor_id DESC
-                LIMIT %s OFFSET %s
-                """,
-                (limit, offset),
-            )
+            query = f"SELECT {VISITOR_COLUMNS} FROM visitor_logs"
+            params = []
+            if guard_id is not None:
+                query += " WHERE guard_id = %s"
+                params.append(guard_id)
+            query += " ORDER BY entry_time DESC, visitor_id DESC LIMIT %s OFFSET %s"
+            params.extend([limit, offset])
+            await cursor.execute(query, params)
             return await cursor.fetchall()
 
-
-async def get_visitor(pool, visitor_id: int):
+async def get_visitor(pool, visitor_id: int, guard_id: int | None = None):
     async with pool.connection() as connection:
         async with connection.cursor(row_factory=dict_row) as cursor:
-            await cursor.execute(
-                f"""
-                SELECT {VISITOR_COLUMNS}
-                FROM visitor_logs
-                WHERE visitor_id = %s
-                """,
-                (visitor_id,),
-            )
+            query = f"SELECT {VISITOR_COLUMNS} FROM visitor_logs WHERE visitor_id = %s"
+            params = [visitor_id]
+            if guard_id is not None:
+                query += " AND guard_id = %s"
+                params.append(guard_id)
+            await cursor.execute(query, params)
             return await cursor.fetchone()
-
-
 async def create_visitor(pool, data: dict):
     async with pool.connection() as connection:
         async with connection.cursor(row_factory=dict_row) as cursor:
@@ -60,44 +55,45 @@ async def create_visitor(pool, data: dict):
     return await get_visitor(pool, visitor_id)
 
 
-async def update_visitor_approval(pool, visitor_id: int, approval_status: str):
+
+async def update_visitor_approval(
+    pool, visitor_id: int, approval_status: str, guard_id: int | None = None
+):
     async with pool.connection() as connection:
         async with connection.cursor(row_factory=dict_row) as cursor:
-            await cursor.execute(
-                """
+            query = """
                 UPDATE visitor_logs
                 SET approval_status = %s
-                WHERE visitor_id = %s
-                  AND exit_time IS NULL
-                RETURNING visitor_id
-                """,
-                (approval_status, visitor_id),
-            )
+                WHERE visitor_id = %s AND exit_time IS NULL
+            """
+            params = [approval_status, visitor_id]
+            if guard_id is not None:
+                query += " AND guard_id = %s"
+                params.append(guard_id)
+            query += " RETURNING visitor_id"
+            await cursor.execute(query, params)
             result = await cursor.fetchone()
-
     if result is None:
         return None
+    return await get_visitor(pool, visitor_id, guard_id)
 
-    return await get_visitor(pool, visitor_id)
-
-
-async def checkout_visitor(pool, visitor_id: int):
+async def checkout_visitor(pool, visitor_id: int, guard_id: int | None = None):
     async with pool.connection() as connection:
         async with connection.cursor(row_factory=dict_row) as cursor:
-            await cursor.execute(
-                """
+            query = """
                 UPDATE visitor_logs
                 SET exit_time = CURRENT_TIMESTAMP
                 WHERE visitor_id = %s
                   AND approval_status = 'Approved'
                   AND exit_time IS NULL
-                RETURNING visitor_id
-                """,
-                (visitor_id,),
-            )
+            """
+            params = [visitor_id]
+            if guard_id is not None:
+                query += " AND guard_id = %s"
+                params.append(guard_id)
+            query += " RETURNING visitor_id"
+            await cursor.execute(query, params)
             result = await cursor.fetchone()
-
     if result is None:
         return None
-
-    return await get_visitor(pool, visitor_id)
+    return await get_visitor(pool, visitor_id, guard_id)

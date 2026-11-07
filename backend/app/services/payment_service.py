@@ -1,37 +1,54 @@
 from psycopg.rows import dict_row
 
 
-async def get_payments(pool, limit: int, offset: int):
+
+async def get_payments(pool, limit: int, offset: int, resident_id: int | None = None):
     async with pool.connection() as connection:
         async with connection.cursor(row_factory=dict_row) as cursor:
-            await cursor.execute(
+            query = """
+                SELECT p.payment_id, p.bill_id, p.amount, p.payment_date,
+                       p.payment_method, p.transaction_reference, p.payment_status
+                FROM payments p
+                JOIN maintenance_bills b ON b.bill_id = p.bill_id
+            """
+            params = []
+            if resident_id is not None:
+                query += """
+                    WHERE b.apartment_id = (
+                        SELECT apartment_id FROM residents
+                        WHERE resident_id = %s
+                    )
                 """
-                SELECT payment_id, bill_id, amount, payment_date,
-                       payment_method, transaction_reference, payment_status
-                FROM payments
-                ORDER BY payment_date DESC, payment_id DESC
+                params.append(resident_id)
+            query += """
+                ORDER BY p.payment_date DESC, p.payment_id DESC
                 LIMIT %s OFFSET %s
-                """,
-                (limit, offset),
-            )
+            """
+            params.extend([limit, offset])
+            await cursor.execute(query, params)
             return await cursor.fetchall()
 
-
-async def get_payment(pool, payment_id: int):
+async def get_payment(pool, payment_id: int, resident_id: int | None = None):
     async with pool.connection() as connection:
         async with connection.cursor(row_factory=dict_row) as cursor:
-            await cursor.execute(
+            query = """
+                SELECT p.payment_id, p.bill_id, p.amount, p.payment_date,
+                       p.payment_method, p.transaction_reference, p.payment_status
+                FROM payments p
+                JOIN maintenance_bills b ON b.bill_id = p.bill_id
+                WHERE p.payment_id = %s
+            """
+            params = [payment_id]
+            if resident_id is not None:
+                query += """
+                    AND b.apartment_id = (
+                        SELECT apartment_id FROM residents
+                        WHERE resident_id = %s
+                    )
                 """
-                SELECT payment_id, bill_id, amount, payment_date,
-                       payment_method, transaction_reference, payment_status
-                FROM payments
-                WHERE payment_id = %s
-                """,
-                (payment_id,),
-            )
+                params.append(resident_id)
+            await cursor.execute(query, params)
             return await cursor.fetchone()
-
-
 async def create_payment(pool, data: dict):
     async with pool.connection() as connection:
         async with connection.cursor(row_factory=dict_row) as cursor:

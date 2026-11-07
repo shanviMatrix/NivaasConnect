@@ -1,10 +1,12 @@
-from fastapi import APIRouter, HTTPException, Query, Request, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from psycopg.errors import ForeignKeyViolation, UniqueViolation
 
 from app.schemas.facility import FacilityCreate, FacilityResponse, FacilityUpdate
 from app.services import facility_service
 
-router = APIRouter(prefix="/facilities", tags=["Facilities"])
+from app.api.dependencies import authorize_resource_access
+
+router = APIRouter(dependencies=[Depends(authorize_resource_access)], prefix="/facilities", tags=["Facilities"])
 
 
 @router.get("", response_model=list[FacilityResponse])

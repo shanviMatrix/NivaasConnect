@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Query, Request, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from psycopg.errors import UniqueViolation
 
 from app.schemas.security_guard import (
@@ -8,7 +8,9 @@ from app.schemas.security_guard import (
 )
 from app.services import security_guard_service
 
-router = APIRouter(prefix="/security-guards", tags=["Security Guards"])
+from app.api.dependencies import authorize_resource_access, get_current_user
+
+router = APIRouter(dependencies=[Depends(authorize_resource_access)], prefix="/security-guards", tags=["Security Guards"])
 
 
 @router.get("", response_model=list[SecurityGuardResponse])
@@ -37,6 +39,23 @@ async def create_security_guard(data: SecurityGuardCreate, request: Request):
             status_code=409,
             detail="A security guard with this phone number already exists.",
         )
+
+
+@router.get("/me", response_model=SecurityGuardResponse)
+async def read_my_security_profile(
+    request: Request,
+    current_user: dict = Depends(get_current_user),
+):
+    guard_id = current_user.get("guard_id")
+    if current_user["role"] != "Security" or guard_id is None:
+        raise HTTPException(status_code=403, detail="Security profile access required.")
+
+    guard = await security_guard_service.get_security_guard(
+        request.app.state.db_pool, guard_id
+    )
+    if guard is None:
+        raise HTTPException(status_code=404, detail="Security profile not found.")
+    return guard
 
 
 @router.get("/{guard_id}", response_model=SecurityGuardResponse)

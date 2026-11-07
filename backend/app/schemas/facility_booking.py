@@ -13,7 +13,7 @@ class FacilityBookingCreate(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     facility_id: int = Field(gt=0)
-    resident_id: int = Field(gt=0)
+    resident_id: int | None = Field(default=None, gt=0)
     start_time: datetime
     end_time: datetime
 
