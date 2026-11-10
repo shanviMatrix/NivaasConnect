@@ -1,0 +1,320 @@
+
+.maintenance-page {
+  --ivory: #F9F5ED;
+  --beige: #DFD0B8;
+  --amber: #D97706;
+  --green: #3F7B57;
+  --slate: #34404A;
+  --muted: #7A8287;
+
+  min-height: 100vh;
+  background: #F4F3EF;
+  color: var(--slate);
+  padding: 38px 5%;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Header */
+
+.maintenance-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.maintenance-breadcrumb {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 9px;
+}
+
+.maintenance-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+}
+
+.maintenance-subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 9px;
+}
+
+.maintenance-back {
+  background: white;
+  border: 1px solid #E7E1D6;
+  color: var(--slate);
+  padding: 12px 17px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Summary cards */
+
+.maintenance-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+.maintenance-summary-card {
+  background: white;
+  border: 1px solid #EAE7DF;
+  border-radius: 10px;
+  padding: 23px;
+  box-shadow: 0 3px 12px #34404A08;
+}
+
+.maintenance-summary-card span {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.maintenance-summary-card h2 {
+  font-size: 25px;
+  margin: 13px 0 7px;
+}
+
+.maintenance-summary-card small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.maintenance-pending {
+  color: var(--amber);
+}
+
+/* Current invoice */
+
+.maintenance-current-bill,
+.maintenance-history {
+  background: white;
+  border: 1px solid #EAE7DF;
+  border-radius: 11px;
+  padding: 28px;
+  margin-bottom: 23px;
+}
+
+.maintenance-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.maintenance-section-heading span:first-child {
+  color: var(--amber);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+}
+
+.maintenance-section-heading h2 {
+  font-size: 19px;
+  margin-top: 7px;
+}
+
+.maintenance-status {
+  background: #FFF0D9;
+  color: #A45C0C;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.maintenance-bill-info {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  padding: 20px 0;
+  border-top: 1px solid #EEEAE2;
+  border-bottom: 1px solid #EEEAE2;
+}
+
+.maintenance-bill-info div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.maintenance-bill-info small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.maintenance-bill-info strong {
+  font-size: 12px;
+}
+
+/* Charges */
+
+.maintenance-charge-heading,
+.maintenance-charge-row,
+.maintenance-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.maintenance-charge-heading {
+  padding: 23px 0 13px;
+  font-size: 13px;
+}
+
+.maintenance-charge-row {
+  padding: 13px 0;
+  border-bottom: 1px solid #F0EDE7;
+  font-size: 12px;
+}
+
+.maintenance-charge-row span {
+  color: var(--muted);
+}
+
+.maintenance-total {
+  padding: 19px 0;
+  font-size: 15px;
+}
+
+/* Payment action */
+
+.maintenance-payment-action {
+  background: #F7F3EB;
+  padding: 20px;
+  border-radius: 9px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.maintenance-payment-action small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.maintenance-payment-action h2 {
+  font-size: 25px;
+  margin-top: 5px;
+}
+
+.maintenance-payment-action button {
+  background: var(--green);
+  color: white;
+  border: none;
+  padding: 14px 23px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.maintenance-payment-action button:hover {
+  background: #315F43;
+}
+
+.maintenance-message {
+  color: var(--green);
+  font-size: 12px;
+  margin-top: 15px;
+}
+
+/* Payment history */
+
+.maintenance-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.maintenance-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.maintenance-table th {
+  background: #F7F5F0;
+  color: #737B80;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 15px;
+}
+
+.maintenance-table td {
+  padding: 17px 15px;
+  border-bottom: 1px solid #EEEAE2;
+  font-size: 11px;
+}
+
+.paid-status {
+  background: #E3EFE5;
+  color: var(--green);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.maintenance-footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 10px;
+  padding: 20px;
+}
+
+/* Responsive */
+
+@media (max-width: 850px) {
+  .maintenance-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .maintenance-bill-info {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .maintenance-page {
+    padding: 25px 5%;
+  }
+
+  .maintenance-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .maintenance-header h1 {
+    font-size: 25px;
+  }
+
+  .maintenance-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .maintenance-current-bill,
+  .maintenance-history {
+    padding: 19px;
+  }
+
+  .maintenance-payment-action {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .maintenance-payment-action button {
+    width: 100%;
+  }
+}

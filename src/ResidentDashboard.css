@@ -1,0 +1,486 @@
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+.resident-dashboard {
+  --ivory: #F9F5ED;
+  --beige: #DFD0B8;
+  --amber: #D97706;
+  --green: #3F7B57;
+  --red: #C74636;
+  --slate: #34404A;
+  --muted: #7A8287;
+  display: flex;
+  min-height: 100vh;
+  background: #F4F3EF;
+  color: var(--slate);
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Sidebar */
+
+.resident-sidebar {
+  width: 255px;
+  flex-shrink: 0;
+  background: #34404A;
+  color: #F9F5ED;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.resident-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 0 5px 30px;
+  border-bottom: 1px solid #ffffff20;
+}
+
+.resident-brand-icon {
+  font-size: 38px;
+  color: #E6A34C;
+}
+
+.resident-brand h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+}
+
+.resident-brand p {
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: #D9D5CA;
+  margin-top: 4px;
+}
+
+.resident-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 25px 5px;
+}
+
+.resident-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #E7D8BE;
+  color: #34404A;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+}
+
+.resident-profile strong,
+.resident-top-profile strong {
+  display: block;
+  font-size: 13px;
+}
+
+.resident-profile small,
+.resident-top-profile small {
+  display: block;
+  font-size: 11px;
+  color: #C6C9C8;
+  margin-top: 4px;
+}
+
+.sidebar-label {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #BFC4C2;
+  margin: 12px 10px;
+}
+
+.resident-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.resident-menu a {
+  text-decoration: none;
+  color: #E2E4E1;
+  padding: 13px 12px;
+  border-radius: 7px;
+  font-size: 13px;
+  transition: 0.2s;
+}
+
+.resident-menu a:hover,
+.resident-menu a.active {
+  background: #ffffff18;
+  color: #F2BC72;
+}
+
+.resident-logout {
+  margin-top: auto;
+  padding: 13px;
+  text-align: left;
+  background: transparent;
+  color: #F0C1B9;
+  border-top: 1px solid #ffffff20;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* Main area */
+
+.resident-main {
+  flex: 1;
+  min-width: 0;
+  padding: 30px 4%;
+}
+
+.resident-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.resident-breadcrumb {
+  color: var(--muted);
+  font-size: 11px;
+  margin-bottom: 7px;
+}
+
+.resident-topbar h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 27px;
+}
+
+.resident-top-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.resident-top-profile small {
+  color: var(--muted);
+}
+
+.notification-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: white;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+}
+
+.resident-avatar.small {
+  width: 36px;
+  height: 36px;
+}
+
+/* Welcome banner */
+
+.resident-welcome {
+  background: #E9DDC9;
+  border-radius: 12px;
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  overflow: hidden;
+}
+
+.resident-welcome span {
+  color: #806B4E;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.resident-welcome h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 25px;
+  margin: 9px 0;
+}
+
+.resident-welcome p {
+  color: #687078;
+  font-size: 13px;
+}
+
+.welcome-decoration {
+  font-size: 90px;
+  color: #3F7B5730;
+}
+
+/* Summary cards */
+
+.resident-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 17px;
+  margin-bottom: 25px;
+}
+
+.resident-stat-card {
+  background: white;
+  border: 1px solid #EAE7DF;
+  border-radius: 10px;
+  padding: 20px;
+  min-width: 0;
+  box-shadow: 0 3px 12px #34404A08;
+}
+
+.stat-icon {
+  width: 37px;
+  height: 37px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  font-size: 19px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.stat-icon.amber { background: #FCEBD5; color: #B86A13; }
+.stat-icon.green { background: #E3EFE5; color: #3F7B57; }
+.stat-icon.blue { background: #DCEAF0; color: #527C91; }
+.stat-icon.red { background: #F7E3DF; color: #C74636; }
+
+.resident-stat-card p {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.resident-stat-card h2 {
+  font-size: 24px;
+  margin: 7px 0;
+}
+
+.resident-stat-card small {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+/* Dashboard panels */
+
+.resident-content-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.resident-panel {
+  background: white;
+  border: 1px solid #EAE7DF;
+  border-radius: 10px;
+  padding: 23px;
+  min-width: 0;
+}
+
+.panel-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.panel-heading span:first-child {
+  color: var(--amber);
+  font-size: 9px;
+  letter-spacing: 1.3px;
+  font-weight: 700;
+}
+
+.panel-heading h3 {
+  font-size: 16px;
+  margin-top: 5px;
+}
+
+.panel-heading a {
+  color: var(--green);
+  font-size: 11px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.status-pending,
+.status-progress,
+.status-resolved {
+  font-size: 10px;
+  padding: 6px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.status-pending { background: #FFF0D9; color: #A45C0C; }
+.status-progress { background: #DCEAF0; color: #416F87; }
+.status-resolved { background: #E3EFE5; color: #3F7B57; }
+
+.payment-amount {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.panel-description {
+  color: var(--muted);
+  font-size: 11px;
+  margin-bottom: 18px;
+}
+
+.payment-details {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 13px 0;
+  border-top: 1px solid #EEEAE2;
+  font-size: 11px;
+}
+
+.payment-details span {
+  color: var(--muted);
+}
+
+.resident-primary-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--green);
+  color: white;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.notice-item,
+.complaint-item {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 12px 0;
+  border-top: 1px solid #EEEAE2;
+}
+
+.notice-date {
+  background: #F6E8B5;
+  color: #795D21;
+  border-radius: 7px;
+  min-width: 42px;
+  padding: 8px 4px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.notice-item strong,
+.complaint-item strong {
+  font-size: 12px;
+}
+
+.notice-item p,
+.complaint-item p {
+  color: var(--muted);
+  font-size: 10px;
+  margin-top: 5px;
+}
+
+.complaint-item {
+  justify-content: space-between;
+}
+
+.visitor-summary {
+  display: flex;
+  gap: 45px;
+  padding: 8px 0 20px;
+}
+
+.visitor-summary h2 {
+  font-size: 26px;
+  color: var(--green);
+}
+
+.visitor-summary p {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.resident-footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 10px;
+  padding: 30px 0 10px;
+}
+
+/* Responsive */
+
+@media (max-width: 1100px) {
+  .resident-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .resident-dashboard {
+    flex-direction: column;
+  }
+
+  .resident-sidebar {
+    width: 100%;
+    min-height: auto;
+    padding: 18px;
+  }
+
+  .resident-profile,
+  .sidebar-label,
+  .resident-logout {
+    display: none;
+  }
+
+  .resident-menu {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-top: 15px;
+  }
+
+  .resident-menu a {
+    white-space: nowrap;
+  }
+
+  .resident-main {
+    padding: 22px 5%;
+  }
+
+  .resident-content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .welcome-decoration {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .resident-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .resident-top-profile > div:last-child {
+    display: none;
+  }
+
+  .resident-topbar h1 {
+    font-size: 22px;
+  }
+
+  .resident-welcome {
+    padding: 22px;
+  }
+
+  .resident-welcome h2 {
+    font-size: 21px;
+  }
+}
